@@ -1,9 +1,8 @@
 package com.milkFirst.MilkFirst_Complaint_Management_System.controller;
 
+import com.milkFirst.MilkFirst_Complaint_Management_System.dto.ComplaintRequestDto;
 import com.milkFirst.MilkFirst_Complaint_Management_System.dto.ComplaintResponseDto;
-import com.milkFirst.MilkFirst_Complaint_Management_System.dto.CreateComplaintRequestDto;
 import com.milkFirst.MilkFirst_Complaint_Management_System.entity.ComplaintStatus;
-import com.milkFirst.MilkFirst_Complaint_Management_System.repository.ComplaintRepo;
 import com.milkFirst.MilkFirst_Complaint_Management_System.service.ComplaintService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,7 +21,7 @@ public class ComplaintController {
     private ComplaintService complaintService;
 
     @PostMapping("/add")
-    public ResponseEntity<ComplaintResponseDto> create(@RequestBody CreateComplaintRequestDto dto) {
+    public ResponseEntity<ComplaintResponseDto> create(@RequestBody ComplaintRequestDto dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(complaintService.createComplaint(dto));
     }
 

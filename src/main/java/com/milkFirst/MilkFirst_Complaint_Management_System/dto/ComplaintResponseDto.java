@@ -14,5 +14,5 @@ public class ComplaintResponseDto {
     private ComplaintStatus status;
     private LocalDateTime raisedOn;
     private LocalDateTime resolvedOn;
-    private Duration duration;
+    private String duration;
 }

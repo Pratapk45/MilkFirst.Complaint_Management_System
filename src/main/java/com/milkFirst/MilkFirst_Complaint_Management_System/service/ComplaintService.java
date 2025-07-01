@@ -1,7 +1,7 @@
 package com.milkFirst.MilkFirst_Complaint_Management_System.service;
 
+import com.milkFirst.MilkFirst_Complaint_Management_System.dto.ComplaintRequestDto;
 import com.milkFirst.MilkFirst_Complaint_Management_System.dto.ComplaintResponseDto;
-import com.milkFirst.MilkFirst_Complaint_Management_System.dto.CreateComplaintRequestDto;
 import com.milkFirst.MilkFirst_Complaint_Management_System.entity.Complaint;
 import com.milkFirst.MilkFirst_Complaint_Management_System.entity.ComplaintStatus;
 import com.milkFirst.MilkFirst_Complaint_Management_System.exception.ComplaintNotFoundException;
@@ -21,7 +21,7 @@ public class ComplaintService {
     @Autowired
     private ComplaintRepo complaintRepo;
 
-    public ComplaintResponseDto createComplaint(CreateComplaintRequestDto dto) {
+    public ComplaintResponseDto createComplaint(ComplaintRequestDto dto) {
         Complaint complaint = new Complaint();
         complaint.setCustomerName(dto.getCustomerName());
         complaint.setIssueDescription(dto.getIssueDescription());
@@ -67,7 +67,8 @@ public class ComplaintService {
         dto.setRaisedOn(complaint.getRaisedOn());
         dto.setResolvedOn(complaint.getResolvedOn());
         if (complaint.getResolvedOn() != null) {
-            dto.setDuration(Duration.between(complaint.getRaisedOn(), complaint.getResolvedOn()));
+            long l=Duration.between(complaint.getRaisedOn(), complaint.getResolvedOn()).toMinutes();
+            dto.setDuration((l/60)+" Hours and "+(l%60)+" Minutes");
         }
 
         return dto;
