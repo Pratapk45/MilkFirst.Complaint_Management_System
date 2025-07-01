@@ -3,6 +3,7 @@ package com.milkFirst.MilkFirst_Complaint_Management_System.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,4 +24,5 @@ public class Complaint {
     private LocalDateTime raisedOn;
 
     private LocalDateTime resolvedOn;
+
 }

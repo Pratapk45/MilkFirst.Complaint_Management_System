@@ -66,6 +66,9 @@ public class ComplaintService {
         dto.setStatus(complaint.getStatus());
         dto.setRaisedOn(complaint.getRaisedOn());
         dto.setResolvedOn(complaint.getResolvedOn());
+        if (complaint.getResolvedOn() != null) {
+            dto.setDuration(Duration.between(complaint.getRaisedOn(), complaint.getResolvedOn()));
+        }
 
         return dto;
     }
