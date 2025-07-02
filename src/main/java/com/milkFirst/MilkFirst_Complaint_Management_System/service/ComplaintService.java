@@ -4,9 +4,13 @@ import com.milkFirst.MilkFirst_Complaint_Management_System.dto.ComplaintRequestD
 import com.milkFirst.MilkFirst_Complaint_Management_System.dto.ComplaintResponseDto;
 import com.milkFirst.MilkFirst_Complaint_Management_System.entity.Complaint;
 import com.milkFirst.MilkFirst_Complaint_Management_System.entity.ComplaintStatus;
+import com.milkFirst.MilkFirst_Complaint_Management_System.entity.Users;
 import com.milkFirst.MilkFirst_Complaint_Management_System.exception.ComplaintNotFoundException;
 import com.milkFirst.MilkFirst_Complaint_Management_System.repository.ComplaintRepo;
+import com.milkFirst.MilkFirst_Complaint_Management_System.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
@@ -21,9 +25,11 @@ public class ComplaintService {
     @Autowired
     private ComplaintRepo complaintRepo;
 
+    @Autowired
+    private  UserRepo userRepo;
+
     public ComplaintResponseDto createComplaint(ComplaintRequestDto dto) {
         Complaint complaint = new Complaint();
-        complaint.setCustomerName(dto.getCustomerName());
         complaint.setIssueDescription(dto.getIssueDescription());
         complaint.setStatus(ComplaintStatus.OPEN);
         complaint.setRaisedOn(LocalDateTime.now());
@@ -59,9 +65,16 @@ public class ComplaintService {
     }
 
     private ComplaintResponseDto toDTO(Complaint complaint) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // this is the logged-in username
+        Users user = userRepo.findByUsername(username);
+
         ComplaintResponseDto dto = new ComplaintResponseDto();
         dto.setComplaintId(complaint.getComplaintId());
-        dto.setCustomerName(complaint.getCustomerName());
+        dto.setCustomerName(user.getUsername());
+        dto.setMobileNo(user.getMobileNo());
+        dto.setGmail(user.getGmail());
         dto.setIssueDescription(complaint.getIssueDescription());
         dto.setStatus(complaint.getStatus());
         dto.setRaisedOn(complaint.getRaisedOn());

@@ -14,8 +14,6 @@ public class Complaint {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long complaintId;
 
-    private String customerName;
-
     private String issueDescription;
 
     @Enumerated(EnumType.STRING)
