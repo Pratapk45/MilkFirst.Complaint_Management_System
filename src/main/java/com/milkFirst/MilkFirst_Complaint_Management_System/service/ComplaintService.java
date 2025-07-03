@@ -33,7 +33,7 @@ public class ComplaintService {
 
     @Autowired
     private  UserRepo userRepo;
-     @PreAuthorize("hasRole('USER')")
+    // @PreAuthorize("hasRole('USER')")
     public ComplaintResponseDto createComplaint(ComplaintRequestDto dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String username = authentication.getName(); // this is the logged-in username

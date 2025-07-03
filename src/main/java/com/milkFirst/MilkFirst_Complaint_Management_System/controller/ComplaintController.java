@@ -33,7 +33,7 @@ public class ComplaintController {
         return ResponseEntity.ok(complaintService.getAllComplaints());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/update/{id}")
     public ResponseEntity<ComplaintResponseDto> updateStatus( @PathVariable Long id, @RequestParam ComplaintStatus status) {
         return ResponseEntity.ok(complaintService.updateStatus(id, status));
     }

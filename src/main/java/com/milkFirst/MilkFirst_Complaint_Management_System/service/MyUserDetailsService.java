@@ -30,7 +30,6 @@ public class MyUserDetailsService implements UserDetailsService {
             return new UserPrincipal(user);
         }
         Admin admin =adminRepo.findByUsername(username);
-        System.out.println("Admin is >>"+admin);
         if(admin!=null){
             return new User(admin.getUsername(), admin.getPassword(),
                     Collections.singletonList(new SimpleGrantedAuthority("ROLE_ADMIN")));

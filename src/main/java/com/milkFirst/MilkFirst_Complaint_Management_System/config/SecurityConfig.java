@@ -1,5 +1,6 @@
 package com.milkFirst.MilkFirst_Complaint_Management_System.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,9 +14,13 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+
     @Autowired
     private UserDetailsService userDetailsService;
+
+    private final CustomAccessDeniedHandler accessDeniedHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -24,11 +29,17 @@ public class SecurityConfig {
                 authorizeHttpRequests(request -> request
                         .requestMatchers("/user/register","/admin/register")
                         .permitAll()
+                       // .requestMatchers("/complaint/getAll").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/complaint/getAll").hasRole("ADMIN")
                         .requestMatchers("/complaint/add").hasRole("USER")
-                        .anyRequest().authenticated()).
-                httpBasic(Customizer.withDefaults()).
-                sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
+                        .requestMatchers("/complaint/update/{id}").hasRole("ADMIN")
+                        .anyRequest().authenticated())
+                .exceptionHandling(ex -> ex
+                        .accessDeniedHandler(accessDeniedHandler))
+                .httpBasic(Customizer.withDefaults())
+
+        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)).build();
+
     }
 
     @Bean
