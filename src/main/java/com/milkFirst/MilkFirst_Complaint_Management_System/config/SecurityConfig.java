@@ -29,10 +29,13 @@ public class SecurityConfig {
                 authorizeHttpRequests(request -> request
                         .requestMatchers("/user/register","/admin/register")
                         .permitAll()
-                       // .requestMatchers("/complaint/getAll").hasAnyRole("USER", "ADMIN")
                         .requestMatchers("/complaint/getAll").hasRole("ADMIN")
                         .requestMatchers("/complaint/add").hasRole("USER")
                         .requestMatchers("/complaint/update/{id}").hasRole("ADMIN")
+                        .requestMatchers("/complaint/status-count").hasRole("ADMIN")
+                        .requestMatchers("/complaint/getAllByUserNameAdmin").hasRole("ADMIN")
+                        .requestMatchers("/complaint/getAllByUserName").hasRole("USER")
+                        // .requestMatchers("/complaint/delete").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated())
                 .exceptionHandling(ex -> ex
                         .accessDeniedHandler(accessDeniedHandler))

@@ -2,13 +2,12 @@ package com.milkFirst.MilkFirst_Complaint_Management_System.controller;
 
 import com.milkFirst.MilkFirst_Complaint_Management_System.dto.ComplaintRequestDto;
 import com.milkFirst.MilkFirst_Complaint_Management_System.dto.ComplaintResponseDto;
+import com.milkFirst.MilkFirst_Complaint_Management_System.entity.Complaint;
 import com.milkFirst.MilkFirst_Complaint_Management_System.entity.ComplaintStatus;
 import com.milkFirst.MilkFirst_Complaint_Management_System.service.ComplaintService;
-import org.apache.tomcat.util.http.parser.Authorization;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,5 +40,14 @@ public class ComplaintController {
     @GetMapping("/status-count")
     public ResponseEntity<Map<ComplaintStatus, Long>> getStatusCount() {
         return ResponseEntity.ok(complaintService.getStatusCount());
+    }
+
+    @GetMapping("/getAllByUserName")
+    public ResponseEntity<List<Complaint>> getAllByUserName() {
+        return ResponseEntity.ok(complaintService.getAllByUserName());
+    }
+    @GetMapping("/getAllByUserNameAdmin")
+    public ResponseEntity<List<Complaint>> getAllUser(@RequestParam String customerName) {
+        return ResponseEntity.ok(complaintService.getAllUser(customerName));
     }
 }

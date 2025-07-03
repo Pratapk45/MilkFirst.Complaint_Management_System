@@ -11,6 +11,7 @@ import com.milkFirst.MilkFirst_Complaint_Management_System.repository.AdminRepo;
 import com.milkFirst.MilkFirst_Complaint_Management_System.repository.ComplaintRepo;
 import com.milkFirst.MilkFirst_Complaint_Management_System.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,7 +33,8 @@ public class ComplaintService {
     private AdminRepo adminRepo;
 
     @Autowired
-    private  UserRepo userRepo;
+    private UserRepo userRepo;
+
     // @PreAuthorize("hasRole('USER')")
     public ComplaintResponseDto createComplaint(ComplaintRequestDto dto) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -89,10 +91,22 @@ public class ComplaintService {
         dto.setRaisedOn(complaint.getRaisedOn());
         dto.setResolvedOn(complaint.getResolvedOn());
         if (complaint.getResolvedOn() != null) {
-            long l=Duration.between(complaint.getRaisedOn(), complaint.getResolvedOn()).toMinutes();
-            dto.setDuration((l/60)+" Hours and "+(l%60)+" Minutes");
+            long l = Duration.between(complaint.getRaisedOn(), complaint.getResolvedOn()).toMinutes();
+            dto.setDuration((l / 60) + " Hours and " + (l % 60) + " Minutes");
         }
 
         return dto;
     }
+
+    public List<Complaint> getAllByUserName() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String customerName = authentication.getName();
+        return complaintRepo.findAllBycustomerName(customerName).stream().toList();
+
+    }
+
+    public List<Complaint> getAllUser(String customerName) {
+        return complaintRepo.findAllBycustomerName(customerName).stream().toList();
+    }
+
 }
