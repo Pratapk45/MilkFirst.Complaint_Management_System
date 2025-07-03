@@ -8,14 +8,12 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Users {
+public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id ;
+    private Long id;
 
-    private  String username;
-    private  String password;
-    private  Long mobileNo ;
-    private String gmail;
-    private String role = "USER";
+    private String username;
+    private String password;
+    private String role = "ADMIN";
 }

@@ -13,6 +13,7 @@ public class Complaint {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long complaintId;
+    private String customerName;
 
     private String issueDescription;
 

@@ -10,8 +10,6 @@ import java.time.LocalDateTime;
 public class ComplaintResponseDto {
     private Long complaintId;
     private String customerName;
-    private  Long mobileNo ;
-    private String gmail;
     private String issueDescription;
     private ComplaintStatus status;
     private LocalDateTime raisedOn;

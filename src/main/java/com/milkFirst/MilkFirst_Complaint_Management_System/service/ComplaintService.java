@@ -2,13 +2,16 @@ package com.milkFirst.MilkFirst_Complaint_Management_System.service;
 
 import com.milkFirst.MilkFirst_Complaint_Management_System.dto.ComplaintRequestDto;
 import com.milkFirst.MilkFirst_Complaint_Management_System.dto.ComplaintResponseDto;
+import com.milkFirst.MilkFirst_Complaint_Management_System.entity.Admin;
 import com.milkFirst.MilkFirst_Complaint_Management_System.entity.Complaint;
 import com.milkFirst.MilkFirst_Complaint_Management_System.entity.ComplaintStatus;
 import com.milkFirst.MilkFirst_Complaint_Management_System.entity.Users;
 import com.milkFirst.MilkFirst_Complaint_Management_System.exception.ComplaintNotFoundException;
+import com.milkFirst.MilkFirst_Complaint_Management_System.repository.AdminRepo;
 import com.milkFirst.MilkFirst_Complaint_Management_System.repository.ComplaintRepo;
 import com.milkFirst.MilkFirst_Complaint_Management_System.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -26,10 +29,18 @@ public class ComplaintService {
     private ComplaintRepo complaintRepo;
 
     @Autowired
-    private  UserRepo userRepo;
+    private AdminRepo adminRepo;
 
+    @Autowired
+    private  UserRepo userRepo;
+     @PreAuthorize("hasRole('USER')")
     public ComplaintResponseDto createComplaint(ComplaintRequestDto dto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String username = authentication.getName(); // this is the logged-in username
+        Users user = userRepo.findByUsername(username);
+
         Complaint complaint = new Complaint();
+        complaint.setCustomerName(user.getUsername());
         complaint.setIssueDescription(dto.getIssueDescription());
         complaint.setStatus(ComplaintStatus.OPEN);
         complaint.setRaisedOn(LocalDateTime.now());
@@ -72,9 +83,7 @@ public class ComplaintService {
 
         ComplaintResponseDto dto = new ComplaintResponseDto();
         dto.setComplaintId(complaint.getComplaintId());
-        dto.setCustomerName(user.getUsername());
-        dto.setMobileNo(user.getMobileNo());
-        dto.setGmail(user.getGmail());
+        dto.setCustomerName(complaint.getCustomerName());
         dto.setIssueDescription(complaint.getIssueDescription());
         dto.setStatus(complaint.getStatus());
         dto.setRaisedOn(complaint.getRaisedOn());
